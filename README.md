@@ -101,3 +101,17 @@ $fl_config['log'] = array(
 Faux Logs takes two arguments:
   * destination - where to write the log file
   * iterations - number of lines based on ``$fl_config['log]`` to write to destination
+  
+### Example
+
+Write to the file access_log 500 lines:
+
+```php
+php -f faux_log.php access_log 500
+```
+
+Write to the file mon-01.xyz.foonet.net_2017-10-17.17-07.dmp 10,000 lines:
+
+```php
+php -f faux_log.php mon-01.xyz.foonet.net_2017-10-17.17-07.dmp 10000
+```
