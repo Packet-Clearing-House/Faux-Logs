@@ -1,3 +1,4 @@
 config.php
 domains.php
 .idea
+*_log
