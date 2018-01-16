@@ -54,7 +54,7 @@ class Faux_Logs
 
         // generate log entries
         $count = 1;
-        while ($count < $iterations) {
+        while ($count <= $iterations) {
             if (is_array($this->config['log']) && sizeof($this->config['log'] > 0)) {
                 foreach ($this->config['log'] as $fieldConfig) {
                     $this->lines .= $this->generate_field($fieldConfig);
