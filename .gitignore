@@ -1,0 +1,6 @@
+config.php
+domains.php
+.idea*
+.idea/*
+*.txt
+*_log
