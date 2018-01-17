@@ -45,17 +45,19 @@ class Faux_Logs
      * @param $iterations of log lines
      */
     function generate_lines($iterations){
-        // generate pre cooked values
-        if(isset($this->config['pre']) && is_array($this->config['pre']) && sizeof($this->config['pre'] > 0)){
-            foreach ($this->config['pre'] as $fieldConfig){
-                $this->preCooked[] = $this->generate_field($fieldConfig);
-            }
-        }
 
         // generate log entries
         $count = 1;
         while ($count <= $iterations) {
             if (is_array($this->config['log']) && sizeof($this->config['log'] > 0)) {
+                // generate pre cooked values
+                if(isset($this->config['pre']) && is_array($this->config['pre']) && sizeof($this->config['pre'] > 0)){
+                    $this->preCooked = array();
+                    foreach ($this->config['pre'] as $fieldConfig){
+                        $this->preCooked[] = $this->generate_field($fieldConfig);
+                    }
+                }
+
                 foreach ($this->config['log'] as $fieldConfig) {
                     $this->lines .= $this->generate_field($fieldConfig);
                 }
