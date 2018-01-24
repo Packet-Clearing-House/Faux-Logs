@@ -1,5 +1,5 @@
 # Faux-Logs
-A PHP script to create fake logs in a format of your choosing.  Originally written to push logs into [AuthDNS](https://github.com/Packet-Clearing-House/AuthDNS) but can be extended to write any format you want.
+A PHP script to create fake logs in a format of your choosing.  Originally written to push logs into [DNSAuth](https://github.com/Packet-Clearing-House/DNSAuth) but can be extended to write any format you want.
 
 ## Configuration
 
