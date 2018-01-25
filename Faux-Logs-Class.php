@@ -31,11 +31,11 @@ class Faux_Logs
                 $this->config = $fl_config;
             } else {
                 $this->error = true;
-                $this->error_msg = "Could not read config file '$configFile'";
+                $this->error_msg = "Could not read config file '$configFile' [0]";
             }
         } else {
             $this->error = true;
-            $this->error_msg = "Could not read config file '$configFile'";
+            $this->error_msg = "Could not read config file '$configFile' [1]";
         }
     }
 

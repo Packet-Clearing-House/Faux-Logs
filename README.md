@@ -1,9 +1,41 @@
 # Faux-Logs
 A PHP script to create fake logs in a format of your choosing.  Originally written to push logs into [DNSAuth](https://github.com/Packet-Clearing-House/DNSAuth) but can be extended to write any format you want.
 
+
+## Execution
+
+Full signature of the script is:
+
+```
+Faux-Logs.php <OUTPUT_FILE> <ITERATIONS>
+```
+
+Where:
+  * OUTPUT_FILE - where to write the log file
+  * ITERATIONS - number of lines based on ``$fl_config['log]`` to write to destination
+  
+### Examples
+
+Write to the file ``access_log`` 500 lines:
+
+```php
+php -f Faux-Logs.php access_log 500
+```
+
+Write to the file ``mon-01.xyz.foonet.net_2017-10-17.17-07.dmp`` 10,000 lines:
+
+```php
+php -f Faux-Logs.php mon-01.xyz.foonet.net_2017-10-17.17-07.dmp 10000
+```
+
+
+
 ## Configuration
 
-Faux Logs looks for a file called "config.php" which has an array defined of the log format.  The array defines each field for a line in your faux log file.  You can look at `config.dist.php` for examples. 
+Faux Logs looks for a file called "config.php" which has an array defined of the log format.  
+The array defines each field for a line in your faux log file.  You can look 
+at ``config.dist.php`` for examples.  Be sure to copy the dist to ``config.php`` and edit that
+file.  ``config.dis.php`` is ignored and just for reference!
 
 Options are:
   * `"str::foo"` - the literal string _foo_. Put any literal string you want here ;)
@@ -56,8 +88,15 @@ $fl_config['log'] = array(
 ```
 
 ### Example 2 - Multi-line log file with pre-cooked IPs and URLs
+
+Resulting lines are:
+```
 Q 173.194.103.137 65.22.83.1 0 0 1 tormsdc11.magna.global. 51
 R 173.194.103.137 65.22.83.1 0 0 1 tormsdc11.magna.global. 631 0
+```
+
+Config: 
+
 ```php
 $fl_config['pre'] = array(
     "fle::clientIPs.txt",
@@ -102,22 +141,46 @@ $fl_config['log'] = array(
 );
 ```
 
-## Execution
 
-Faux Logs takes two arguments:
-  * destination - where to write the log file
-  * iterations - number of lines based on ``$fl_config['log]`` to write to destination
-  
-### Example
+### Wrapper script
 
-Write to the file access_log 500 lines:
+Faux-Logs also ships with a wrapper script.  It will iterate over an array of 
+file names, call Faux-Logs for each one and compress (gzip) the 
+resulting file. If you you want to create a large repository of historical 
+log files with a time stamp in the file name, here you go! 
 
-```php
-php -f faux_log.php access_log 500
+First, copy ``config2.dist.php`` to  ``config2.php`` and edit it to have the 
+file names you want.  
+
+Full signature of the script is:
+
+```
+multi-file.gzip.php <OUTPUT_PATH> <ITERATIONS_PER_FILE> [SLEEP] [EPOCH]
 ```
 
-Write to the file mon-01.xyz.foonet.net_2017-10-17.17-07.dmp 10,000 lines:
+Where:
+* OUTPUT_PATH - (required) directory to write the files t
+* ITERATIONS_PER_FILE - (required) How many lines to write to a file
+* SLEEP - (optional) Microseconds to wait between looping over $files array
+* EPOCH - (optional) Epoch time to start working form (will ignore SLEEP)
 
-```php
-php -f faux_log.php mon-01.xyz.foonet.net_2017-10-17.17-07.dmp 10000
+This script will not stop until you cancel the call (ctl + c).
+
+#### Examples
+
+Write 100 lines for each file to the ``.`` (current) directory:
+
 ```
+php -f multi-file.gzip.php . 100 
+```
+
+Write 1,000 lines for each file to the ``/tmp/pcaps/`` directory sleeping 2000000 
+microseconds and starting from the epoch ``1514834140``:
+
+```
+php -f multi-file.gzip.php /tmp/pcaps/ 1000 2000000 1514834140
+```
+
+**Warning!** - ``multi-file.gzip.php`` can write a lot of data quickly. Be sure you are careful 
+not to fill up your boot drive or somehwere else important! Remember, it won't
+stop until you tell it to! 
