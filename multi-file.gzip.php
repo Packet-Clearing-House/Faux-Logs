@@ -13,12 +13,16 @@
  * This script will run endlessly until you stop it (ctl + c)
  */
 
-$files = array();
-$files[] = 'foo.pch.net';
-$files[] = 'bar.pch.net';
-$files[] = 'bash.pch.net';
-$files[] = 'bang.pch.net';
-$files[] = 'qux.pch.net';
+require_once("config2.php");
+
+if (!isset($files)) {
+    $files = array();
+    $files[] = 'foo.pch.net';
+    $files[] = 'bar.pch.net';
+    $files[] = 'bash.pch.net';
+    $files[] = 'bang.pch.net';
+    $files[] = 'qux.pch.net';
+}
 
 // init
 $sleep = 0;
@@ -67,12 +71,22 @@ elseif(!is_writable($savePath)){
     exit;
 }
 
+// make sure have a valid files array
+if (!isset($files) || !is_array($files) || sizeof($files) < 1){
+    echo 'Sorry, $files is either not an array or is an empty array.' . "\n\n";
+    exit;
+}
+
+
 // make sure we got an int
 // thanks https://stackoverflow.com/a/29018655
 if ( strval($iterations) != strval(intval($iterations)) ) {
     echo "Sorry, \"$iterations\" is not an integer for iterations.\n\n";
     exit;
 }
+
+$fileCount = sizeof($files);
+print "Starting to call Faux-Logs with $fileCount files for $iterations iterations. Please wait while we run the first round.\n";
 
 // run endlessly - wheeeee!
 while (true){
@@ -81,7 +95,7 @@ while (true){
     if ($startDate < time(strtotime('-30 seconds'))){
         $_startDateFL =  date('Y-m-d.H-i', $startDate);
         $startDate += $threeMin;
-        $backLogTime = '. Working forward from: ' . $_startDateFL;
+        $backLogTime = '. Working from: ' . $_startDateFL;
     } else {
         $_startDateFL =  date('Y-m-d.H-i');
         if ($sleep > 0) {
@@ -105,7 +119,7 @@ while (true){
     }
 
     // output status
-    print "Files Written: $filesWritten, Lines Written: " . number_format($linesWritten). "$backLogTime\n";
+    print "\tFiles Written: $filesWritten, Lines Written: " . number_format($linesWritten). "$backLogTime\n";
 }
 
 
