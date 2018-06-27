@@ -49,9 +49,9 @@ class Faux_Logs
         // generate log entries
         $count = 1;
         while ($count <= $iterations) {
-            if (is_array($this->config['log']) && sizeof($this->config['log'] > 0)) {
+            if (is_array($this->config['log']) && sizeof($this->config['log']) > 0) {
                 // generate pre cooked values
-                if(isset($this->config['pre']) && is_array($this->config['pre']) && sizeof($this->config['pre'] > 0)){
+                if(isset($this->config['pre']) && is_array($this->config['pre']) && sizeof($this->config['pre']) > 0){
                     $this->preCooked = array();
                     foreach ($this->config['pre'] as $fieldConfig){
                         $this->preCooked[] = $this->generate_field($fieldConfig);
