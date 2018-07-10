@@ -16,6 +16,7 @@
 require_once("config2.php");
 
 // init
+date_default_timezone_set('UTC');
 $sleep = 0;
 $startDate = time();
 $threeMin = 180;
